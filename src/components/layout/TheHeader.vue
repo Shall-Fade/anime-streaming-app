@@ -27,7 +27,7 @@
       </li>
     </ul>
     <input
-      @keyup.enter="getAnimes()"
+      @keyup.enter="searchAnimes()"
       v-model="searchQuery"
       class="laptop:order-3 order-4 laptop:static absolute left-0 top-20 laptop:w-auto w-full outline-1 text-[18px] py-[8px] pl-[18px] pr-[100px] rounded-[37px] outline-teal bg-light-grey"
       type="text"
@@ -39,28 +39,57 @@
 <script>
 import axios from "axios";
 import { useStore } from "vuex";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import router from "../../router";
 export default {
   setup() {
     // Переменные
     const store = useStore();
     const searchQuery = ref("");
-    const animes = ref();
+    const animes = ref([]);
+    const lastVisiblePage = ref(1);
+    let page = 1;
     const menuIsOpen = ref(false);
 
+    // Бесконечная прокрутка
+    onMounted(() => {
+      window.addEventListener("scroll", () => {
+        let scrollTop = document.documentElement.scrollTop;
+        let scrollHeight = document.documentElement.scrollHeight;
+        let clientHeight = document.documentElement.clientHeight;
+
+        if (scrollTop + clientHeight >= scrollHeight - 450) {
+          if (page >= lastVisiblePage.value) {
+            return;
+          } else {
+            page++;
+            getAnimes();
+          }
+        }
+      });
+    });
+
+    // Обнулить данные и найти аниме по запросу
+    function searchAnimes() {
+      animes.value.length = 0;
+      lastVisiblePage.value = 1;
+      page = 1;
+
+      getAnimes();
+    }
+
     // Получить найденные аниме
-    function getAnimes(page) {
-      if (searchQuery.value) {
-        axios
-          .get(`https://api.jikan.moe/v4/anime?q=${searchQuery.value}&sfw`)
-          .then((responce) => {
-            animes.value = responce.data.data;
-            store.commit("GET_FOUND_ANIMES", animes.value);
-            searchQuery.value = "";
-            router.push("/search");
-          });
-      }
+    function getAnimes() {
+      axios
+        .get(
+          `https://api.jikan.moe/v4/anime?q=${searchQuery.value}&page=${page}&sfw&sort=asc`
+        )
+        .then((responce) => {
+          router.push("/search");
+          animes.value = animes.value.concat(responce.data.data);
+          lastVisiblePage.value = responce.data.pagination.last_visible_page;
+          store.commit("GET_FOUND_ANIMES", animes.value);
+        });
     }
 
     // Открыть и закрыть меню
@@ -71,6 +100,7 @@ export default {
     return {
       searchQuery,
       menuIsOpen,
+      searchAnimes,
       getAnimes,
       openMenu,
     };
