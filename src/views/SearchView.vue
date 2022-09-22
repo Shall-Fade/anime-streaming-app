@@ -1,5 +1,6 @@
 <template>
   <div>
+    <BasePreloader />
     <base-anime-top-template id="infinity-list">
       <template v-slot:title>Search Results</template>
       <template v-slot:cards>

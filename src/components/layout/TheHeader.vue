@@ -39,7 +39,7 @@
 <script>
 import axios from "axios";
 import { useStore } from "vuex";
-import { ref, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 import router from "../../router";
 export default {
   setup() {
@@ -48,8 +48,17 @@ export default {
     const searchQuery = ref("");
     const animes = ref([]);
     const lastVisiblePage = ref(1);
+    const loading = ref(false);
     let page = 1;
     const menuIsOpen = ref(false);
+
+    // Отслеживание изменения прелоадера
+    watch(
+      () => loading.value,
+      () => {
+        store.commit("TOGGLE_LOADING", loading.value);
+      }
+    );
 
     // Бесконечная прокрутка
     onMounted(() => {
@@ -58,13 +67,12 @@ export default {
         let scrollHeight = document.documentElement.scrollHeight;
         let clientHeight = document.documentElement.clientHeight;
 
-        if (scrollTop + clientHeight >= scrollHeight - 450) {
-          if (page >= lastVisiblePage.value) {
-            return;
-          } else {
-            page++;
-            getAnimes();
-          }
+        if (
+          scrollTop + clientHeight >= scrollHeight &&
+          page < lastVisiblePage.value
+        ) {
+          page++;
+          getAnimes();
         }
       });
     });
@@ -80,16 +88,20 @@ export default {
 
     // Получить найденные аниме
     function getAnimes() {
-      axios
-        .get(
-          `https://api.jikan.moe/v4/anime?q=${searchQuery.value}&page=${page}&sfw&sort=asc`
-        )
-        .then((responce) => {
-          router.push("/search");
-          animes.value = animes.value.concat(responce.data.data);
-          lastVisiblePage.value = responce.data.pagination.last_visible_page;
-          store.commit("GET_FOUND_ANIMES", animes.value);
-        });
+      loading.value = true;
+      setTimeout(() => {
+        axios
+          .get(
+            `https://api.jikan.moe/v4/anime?q=${searchQuery.value}&page=${page}&sfw&sort=asc`
+          )
+          .then((responce) => {
+            router.push("/search");
+            animes.value = animes.value.concat(responce.data.data);
+            lastVisiblePage.value = responce.data.pagination.last_visible_page;
+            store.commit("GET_FOUND_ANIMES", animes.value);
+          });
+        loading.value = false;
+      }, 1000);
     }
 
     // Открыть и закрыть меню

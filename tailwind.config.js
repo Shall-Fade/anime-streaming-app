@@ -20,6 +20,9 @@ module.exports = {
       fontFamily: {
         poppins: ["Poppins"],
       },
+      animation: {
+        "spin": "spin 3s linear infinite",
+      },
     },
   },
   plugins: [],
