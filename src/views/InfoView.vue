@@ -1,5 +1,5 @@
 <template>
-  <div class="flex laptop:flex-row flex-col laptop:justify-between ">
+  <div class="flex laptop:flex-row flex-col laptop:justify-between">
     <div class="laptop:max-w-[770px]">
       <InfoViewTrailer />
       <InfoViewDescription />

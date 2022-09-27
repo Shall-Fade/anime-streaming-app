@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import BaseAnimeCard from "./components/base/BaseAnimeCard.vue";
+import BaseCharacterCard from "./components/base/BaseCharacterCard.vue";
 import BaseAnimeTopTemplate from "./components/base/BaseAnimeTopTemplate.vue";
 import BasePreloader from "./components/base/BasePreloader.vue";
 import "./index.css";
@@ -10,6 +11,7 @@ import store from "./store";
 const app = createApp(App);
 
 app.component("BaseAnimeCard", BaseAnimeCard);
+app.component("BaseCharacterCard", BaseCharacterCard);
 app.component("BaseAnimeTopTemplate", BaseAnimeTopTemplate);
 app.component("BasePreloader", BasePreloader);
 

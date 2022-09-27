@@ -1,9 +1,9 @@
 <template>
-  <nav
+  <header
     class="relative desktop:max-w-[1170px] tablet:max-w-[768px] laptop:max-w-[1024px] max-w-[350px] laptop:mb-0 mb-[45px] mx-auto my-0 pt-[24px] pb-[40px] flex items-center justify-between"
   >
     <h1 class="order-1 text-[32px] font-bold leading-8 tracking-[4px]">
-      Anonime
+      <a href="/">Anonime</a>
     </h1>
     <button
       class="text-[25px] order-2 laptop:hidden cursor-pointer"
@@ -33,7 +33,7 @@
       type="text"
       placeholder="Search anime"
     />
-  </nav>
+  </header>
 </template>
 
 <script>

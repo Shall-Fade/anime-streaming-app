@@ -6,7 +6,7 @@
         :src="currentAnime.images.jpg.image_url"
         :alt="currentAnime.title"
       />
-      <div>
+      <div class="w-full">
         <div class="pb-[12px]">
           <h4 class="laptop:text-[20px] tablet:text-[16px] text-[14px] font-semibold pb-[4px]">Type :</h4>
           <p class="text-medium-grey">{{ currentAnime.type }}</p>
@@ -34,7 +34,7 @@
         <div class="pb-[12px]">
           <h4 class="laptop:text-[20px] tablet:text-[16px] text-[14px] font-semibold pb-[10px]">Genres :</h4>
           <p
-            class="text-medium-grey inline mr-[10px] laptop:px-[10px] laptop:py-[3px] px-[7px] py-[2px] border border-medium-grey rounded-full"
+            class="text-medium-grey tablet:mb-0 tablet:mr-[10px] mr-[8px] mb-[8px] inline-block laptop:px-[10px] laptop:py-[3px] px-[7px] py-[2px] border border-medium-grey rounded-full"
             v-for="genre in currentAnime.genres"
             :key="genre.mal_id"
           >

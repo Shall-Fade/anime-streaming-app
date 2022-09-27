@@ -1,22 +1,32 @@
 <template>
-  <div v-if="currentAnime && currentAnimeCharacters" class="laptop:mb-0 mb-[40px]">
-    <h4 class="laptop:text-[20px] tablet:text-[18px] text-[16px] font-semibold pb-[10px]">Main characters :</h4>
-    <div class="grid laptop:grid-cols-2 tablet:grid-cols-5 grid-cols-2 gap-[20px]">
-      <div
+  <div
+    v-if="currentAnime && currentAnimeCharacters"
+    class="laptop:mb-0 mb-[40px]"
+  >
+    <h4
+      class="laptop:text-[20px] tablet:text-[18px] text-[16px] font-semibold pb-[10px]"
+    >
+      Main characters :
+    </h4>
+    <div
+      class="grid laptop:grid-cols-2 tablet:grid-cols-5 grid-cols-2 gap-[20px]"
+    >
+      <base-character-card
         v-for="currentAnimeCharacter in currentAnimeCharacters"
         :key="currentAnimeCharacter.mal_id"
+        :character="currentAnimeCharacter"
       >
-        <img
-          class="w-[120px] h-[180px] rounded-[12px]"
-          :src="currentAnimeCharacter.images.jpg.image_url"
-          :alt="currentAnimeCharacter.name"
-        />
-        <h4
-          class="max-w-[120px] text-center text-[14px] text-medium-grey font-semibold pt-[4px]"
-        >
+        <template v-slot:image>
+          <img
+            class="w-[120px] h-[180px]"
+            :src="currentAnimeCharacter.images.jpg.image_url"
+            :alt="currentAnimeCharacter.name"
+          />
+        </template>
+        <template v-slot:name>
           {{ currentAnimeCharacter.name }}
-        </h4>
-      </div>
+        </template>
+      </base-character-card>
     </div>
   </div>
 </template>
